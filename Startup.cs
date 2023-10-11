@@ -29,6 +29,19 @@ namespace makersmatch_server
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "corspolicy",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:3000",
+                                            "http://127.0.0.1:3000")
+
+                                                .AllowAnyHeader()
+                                                .AllowAnyMethod();
+                    });
+            });
+
             // Adding Authentication
             services.AddAuthentication(options =>
             {
@@ -67,6 +80,8 @@ namespace makersmatch_server
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors("corspolicy");
 
             app.UseSwagger();
             app.UseSwaggerUI();

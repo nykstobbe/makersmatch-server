@@ -1,4 +1,5 @@
 ﻿using makersmatch_server.Authentication;
+using makersmatch_server.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +23,11 @@ namespace makersmatch_server
             services.AddControllers();
 
             // For Entity Framework
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
+            services.AddDbContext<MakersMatchContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
 
             // For Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<MakersMatchContext>()
                 .AddDefaultTokenProviders();
 
             services.AddCors(options =>

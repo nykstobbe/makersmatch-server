@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using makersmatch_server.Authentication;
+using makersmatch_server.Data;
 
 #nullable disable
 
 namespace makersmatch_server.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231005191745_Initial")]
+    [DbContext(typeof(MakersMatchContext))]
+    [Migration("20231012192139_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -223,6 +223,55 @@ namespace makersmatch_server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("makersmatch_server.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProblemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProblemId");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("makersmatch_server.Models.Problem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSolved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Problems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -272,6 +321,18 @@ namespace makersmatch_server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("makersmatch_server.Models.Image", b =>
+                {
+                    b.HasOne("makersmatch_server.Models.Problem", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProblemId");
+                });
+
+            modelBuilder.Entity("makersmatch_server.Models.Problem", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

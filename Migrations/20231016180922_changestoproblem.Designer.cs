@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using makersmatch_server.Data;
 
@@ -11,9 +12,11 @@ using makersmatch_server.Data;
 namespace makersmatch_server.Migrations
 {
     [DbContext(typeof(MakersMatchContext))]
-    partial class MakersMatchContextModelSnapshot : ModelSnapshot
+    [Migration("20231016180922_changestoproblem")]
+    partial class changestoproblem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

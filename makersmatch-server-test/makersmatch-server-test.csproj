@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\makersmatch-server.csproj" />
     <ProjectReference Include="..\makersmatch-server\makersmatch-server.csproj" />
   </ItemGroup>
 

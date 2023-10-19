@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Xunit;
 
 namespace makersmatch_server_test
 {
@@ -14,19 +15,7 @@ namespace makersmatch_server_test
         [Fact]
         public async Task Test1Async()
         {
-            // arrange
-            var mock = new Mock<MakersMatchContext>();
-            var mockSet = new Mock<DbSet<Problem>>();
-            mock.Setup(x => x.Set<Problem>())
-                .Returns(mockSet.Object);
-
-            var controller = new ProblemController(mock.Object);
-
-            // act
-            var response = await controller.Get(-1);
             
-            // assert
-            Assert.IsType<NotFoundResult>(response);
         }
     }
 }

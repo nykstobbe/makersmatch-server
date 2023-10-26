@@ -39,7 +39,6 @@ namespace makersmatch_server
                     {
                         policy.WithOrigins("http://localhost:3000",
                                             "http://127.0.0.1:3000")
-
                                                 .AllowAnyHeader()
                                                 .AllowAnyMethod();
                     });
@@ -111,7 +110,8 @@ namespace makersmatch_server
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors("corspolicy");
+            // app.UseCors("corspolicy");
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseSwagger();
             app.UseSwaggerUI();

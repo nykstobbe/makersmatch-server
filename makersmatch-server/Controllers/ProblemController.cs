@@ -72,5 +72,15 @@ namespace makersmatch_server.Controllers
 
             return Ok(problems);
         }
+
+        [HttpGet]
+        [Authorize(Roles = UserRoles.Maker)]
+        [Route("get-solvable-problems")]
+        public async Task<IActionResult> GetSolvableProblems()
+        {
+            List<Problem> problems = _context.Problems.Where(p => !p.IsSolved).ToList();
+
+            return Ok(problems);
+        }
     }
 }

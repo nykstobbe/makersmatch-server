@@ -41,6 +41,7 @@ namespace makersmatch_server.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("get-messages/{chatId}")]
         public async Task<IActionResult> GetMessages(int chatId)
         {

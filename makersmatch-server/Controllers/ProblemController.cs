@@ -38,7 +38,7 @@ namespace makersmatch_server.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("get")]
+        [Route("get/{id}")]
         public async Task<IActionResult> Get(int id)
         {
             Problem? problem = _context.Problems.Find(id);

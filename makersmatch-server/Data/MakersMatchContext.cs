@@ -2,6 +2,7 @@
 using makersmatch_server.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace makersmatch_server.Data
 {
@@ -14,11 +15,17 @@ namespace makersmatch_server.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ChatMessage>()
+                .Property(s => s.CreatedDate)
+                .HasDefaultValueSql("GETDATE()");
+
             base.OnModelCreating(builder);
         }
 
         public DbSet<Problem> Problems { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
     }
 }

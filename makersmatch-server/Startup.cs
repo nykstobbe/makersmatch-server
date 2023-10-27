@@ -1,11 +1,14 @@
 ﻿using makersmatch_server.Authentication;
 using makersmatch_server.Data;
+using makersmatch_server.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace makersmatch_server
 {
@@ -21,8 +24,13 @@ namespace makersmatch_server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+            );
+
             services.AddHttpContextAccessor();
+
+            services.AddSignalR();
 
             // For Entity Framework
             services.AddDbContext<MakersMatchContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
@@ -37,10 +45,10 @@ namespace makersmatch_server
                 options.AddPolicy(name: "corspolicy",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:3000",
-                                            "http://127.0.0.1:3000")
-                                                .AllowAnyHeader()
-                                                .AllowAnyMethod();
+                        policy.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
                     });
             });
 
@@ -110,8 +118,8 @@ namespace makersmatch_server
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // app.UseCors("corspolicy");
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("corspolicy");
+            //app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -119,6 +127,7 @@ namespace makersmatch_server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat-hub");
             });
         }
     }

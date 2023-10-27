@@ -3,8 +3,8 @@
     public class Chat
     {
         public int Id { get; set; }
-        public SimpleUser User1 { get; set; }
-        public SimpleUser User2 { get; set; }
-        public ICollection<ChatMessage> ChatMessages { get; set;}
+        public string User1ID { get; set; }
+        public string User2ID { get; set; }
+        public ICollection<ChatMessage> ChatMessages { get; set;} = new List<ChatMessage>();
     }
 }

@@ -13,15 +13,9 @@ namespace makersmatch_server_test
     public class VerificationTest
     {
         [Fact]
-        public async Task SuccesTaskAsync()
+        public async Task SuccesTestAsync()
         {
             
-        }
-
-        [Fact]
-        public async Task FailTestAsync()
-        {
-            Assert.Equal(1, 2);
         }
     }
 }

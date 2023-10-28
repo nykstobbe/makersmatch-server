@@ -1,6 +1,7 @@
 ﻿using makersmatch_server.Authentication;
 using makersmatch_server.Data;
 using makersmatch_server.Hubs;
+using makersmatch_server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,8 @@ namespace makersmatch_server
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<MakersMatchContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IUserService, UserService>();
 
             services.AddCors(options =>
             {

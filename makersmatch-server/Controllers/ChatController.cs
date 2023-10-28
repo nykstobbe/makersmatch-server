@@ -2,6 +2,7 @@
 using makersmatch_server.Data;
 using makersmatch_server.Hubs;
 using makersmatch_server.Models;
+using makersmatch_server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,12 @@ namespace makersmatch_server.Controllers
     {
         private readonly MakersMatchContext _context;
         private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IUserService _userService;
 
-        public ChatController(MakersMatchContext context, IHubContext<ChatHub> hubContext) {
+        public ChatController(MakersMatchContext context, IHubContext<ChatHub> hubContext, IUserService userService) {
             _context = context;
             _hubContext = hubContext;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -52,6 +55,11 @@ namespace makersmatch_server.Controllers
 
             chat.ChatMessages = _context.ChatMessages.Where(cm => cm.Chat.Id == chat.Id).ToList();
 
+            foreach (ChatMessage cm in chat.ChatMessages)
+            {
+                cm.SenderID = await _userService.GetUserName(cm.SenderID);
+            }
+
             return Ok(chat);
         }
 
@@ -75,7 +83,7 @@ namespace makersmatch_server.Controllers
             _context.ChatMessages.Add(chatMessage);
             _context.SaveChanges();
 
-            await _hubContext.Clients.All.SendAsync("receiveMessage", thisUserId, message);
+            await _hubContext.Clients.All.SendAsync("receiveMessage", await _userService.GetUserName(thisUserId), message);
 
             return Ok();
         }
